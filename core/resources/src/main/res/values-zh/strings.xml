@@ -78,4 +78,6 @@
     <string name="close_last_session_exit_desc">关闭应用程序</string>
     <string name="close_last_session_new">新建会话</string>
     <string name="close_last_session_new_desc">创建新会话而不是退出</string>
+    <string name="color_scheme">配色方案</string>
+    <string name="color_scheme_desc">终端和应用程序配色主题</string>
 </resources>

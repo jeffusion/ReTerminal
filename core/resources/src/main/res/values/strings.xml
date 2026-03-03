@@ -78,4 +78,6 @@
     <string name="close_last_session_exit_desc">Close the application</string>
     <string name="close_last_session_new">New Session</string>
     <string name="close_last_session_new_desc">Create a new session instead of exiting</string>
+    <string name="color_scheme">Color Scheme</string>
+    <string name="color_scheme_desc">Terminal and app color theme</string>
 </resources>

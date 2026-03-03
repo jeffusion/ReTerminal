@@ -38,4 +38,6 @@
     <string name="close_last_session_exit_desc">إغلاق التطبيق</string>
     <string name="close_last_session_new">جلسة جديدة</string>
     <string name="close_last_session_new_desc">إنشاء جلسة جديدة بدلاً من الإنهاء</string>
+    <string name="color_scheme">نظام الألوان</string>
+    <string name="color_scheme_desc">سمة ألوان الطرفية والتطبيق</string>
 </resources>
