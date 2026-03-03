@@ -62,6 +62,7 @@ import com.rk.terminal.ui.screens.terminal.wallAlpha
 import com.rk.terminal.ui.screens.terminal.ShortcutAction
 import com.rk.terminal.ui.screens.terminal.ShortcutCaptureDialog
 import kotlinx.coroutines.Dispatchers
+import com.rk.terminal.ui.theme.colorscheme.ColorSchemeManager
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -96,6 +97,26 @@ fun Customization(modifier: Modifier = Modifier) {
                     valueRange = min_text_size..max_text_size,
                 )
             }
+        }
+
+        // Color Scheme Selector
+        PreferenceGroup {
+            PreferenceTemplate(
+                title = { Text(stringResource(strings.color_scheme)) },
+                description = { Text(stringResource(strings.color_scheme_desc)) }
+            ) {}
+            ColorSchemeSelector(
+                onSchemeSelected = { scheme ->
+                    // Update terminal colors when scheme changes
+                    terminalView.get()?.let { tv ->
+                        ColorSchemeManager.setTerminalView(tv)
+                        ColorSchemeManager.applyCurrentSchemeToTerminal()
+                        tv.invalidate()
+                    }
+                    // Update text color based on scheme
+                    darkText.value = !scheme.isDark
+                }
+            )
         }
 
         fun getFileNameFromUri(context: Context, uri: Uri): String? {
