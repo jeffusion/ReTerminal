@@ -73,21 +73,13 @@ object MkSession {
                 "PKG=${packageName}",
                 "RISH_APPLICATION_ID=${packageName}",
                 "PKG_PATH=${applicationInfo.sourceDir}",
-                "PROOT_TMP_DIR=${getTempDir().child(session_id).also { if (it.exists().not()){it.mkdirs()} }}",
+                "PROOT_TMP_DIR=${getTempDir().child(session_id).also { if (it.exists().not()){it.mkdirs()} }.absolutePath}",
                 "TMPDIR=${getTempDir().absolutePath}"
             )
 
-            if (File(applicationInfo.nativeLibraryDir).child("libproot-loader32.so").exists()){
-                env.add("PROOT_LOADER32=${applicationInfo.nativeLibraryDir}/libproot-loader32.so")
-            }
-
-            if (File(applicationInfo.nativeLibraryDir).child("libproot-loader.so").exists()){
-                env.add("PROOT_LOADER=${applicationInfo.nativeLibraryDir}/libproot-loader.so")
-            }
-
-            if (Settings.seccomp) {
-                env.add("SECCOMP=1")
-            }
+            // Do NOT set PROOT_LOADER/PROOT_LOADER32 — let proot use its embedded loader.
+            // External loaders from jniLibs conflict with proot's ashmem_memfd extension
+            // and fail on Android 10+ due to W^X (Write XOR Execute) policy.
 
 
 

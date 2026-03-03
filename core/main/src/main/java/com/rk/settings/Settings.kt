@@ -12,9 +12,6 @@ import com.rk.terminal.ui.screens.settings.LayoutMode
 import com.rk.terminal.ui.screens.settings.CloseLastSessionBehavior
 object Settings {
     //Boolean
-    var seccomp
-        get() = Preference.getBoolean(key = "seccomp", default = false)
-        set(value) = Preference.setBoolean(key = "seccomp",value)
     var amoled
         get() = Preference.getBoolean(key = "oled", default = false)
         set(value) = Preference.setBoolean(key = "oled",value)

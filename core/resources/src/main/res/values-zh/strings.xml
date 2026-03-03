@@ -7,8 +7,6 @@
     <string name="alpine_desc">Alpine Linux</string>
     <string name="android_desc">ReTerminal Android Shell</string>
     <string name="customizations">自定义</string>
-    <string name="seccomp">SECCOMP</string>
-    <string name="seccomp_desc">修复"操作不被允许"错误</string>
     <string name="all_file_access">完整文件访问</string>
     <string name="all_file_access_desc">启用对 /sdcard 和 /storage 的访问</string>
     <string name="text_size">文字大小</string>

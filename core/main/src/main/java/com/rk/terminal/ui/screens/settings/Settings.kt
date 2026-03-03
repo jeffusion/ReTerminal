@@ -277,14 +277,6 @@ fun Settings(modifier: Modifier = Modifier,navController: NavController,mainActi
         }
 
         PreferenceGroup {
-            SettingsToggle(
-                label = stringResource(strings.seccomp),
-                description = stringResource(strings.seccomp_desc),
-                showSwitch = true,
-                default = Settings.seccomp,
-                sideEffect = {
-                    Settings.seccomp = it
-                })
 
             SettingsToggle(
                 label = stringResource(strings.all_file_access),
