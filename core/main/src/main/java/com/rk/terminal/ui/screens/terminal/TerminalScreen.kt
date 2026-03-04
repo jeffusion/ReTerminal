@@ -640,7 +640,15 @@ private fun TerminalPaneContent(
     // Observe color scheme state to trigger recomposition when it changes
     val currentScheme = ColorSchemeManager.currentScheme.value
     val terminalBackgroundColor = currentScheme.background
-    
+
+    // Request focus on the terminal view after Compose layout completes.
+    // This handles: initial launch, returning from Settings, and session switches.
+    // A short delay ensures Compose's own focus system has finished its pass.
+    LaunchedEffect(Unit) {
+        kotlinx.coroutines.delay(100)
+        terminalView.get()?.post { terminalView.get()?.requestFocus() }
+    }
+
     Column(modifier = modifier) {
         AndroidView(
             factory = { context ->
@@ -682,6 +690,9 @@ private fun TerminalPaneContent(
                     setTerminalViewClient(client)
                     setTypeface(font)
 
+                    isFocusable = true
+                    isFocusableInTouchMode = true
+
                     post {
                         // Apply the saved color scheme
                         ColorSchemeManager.setTerminalView(this)
@@ -702,7 +713,6 @@ private fun TerminalPaneContent(
                         
                         keepScreenOn = true
                         requestFocus()
-                        isFocusableInTouchMode = true
                         
                         // Legacy colors.properties support (can override scheme)
                         val colorsFile = localDir().child("colors.properties")
@@ -948,7 +958,6 @@ fun changeSession(mainActivityActivity: MainActivity, session_id: String) {
             
             keepScreenOn = true
             requestFocus()
-            isFocusableInTouchMode = true
         }
         virtualKeysView.get()?.apply {
             virtualKeysViewClient =
