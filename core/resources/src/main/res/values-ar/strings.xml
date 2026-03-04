@@ -46,6 +46,11 @@
     <string name="close_last_session_new_desc">إنشاء جلسة جديدة بدلاً من الإنهاء</string>
     <string name="color_scheme">نظام الألوان</string>
     <string name="color_scheme_desc">سمة ألوان الطرفية والتطبيق</string>
+    <string name="appearance_and_interface">المظهر والواجهة</string>
+    <string name="input_and_feedback">الإدخال والاستجابة</string>
+    <string name="terminal_environment">بيئة الطرفية</string>
+    <string name="session_behavior">سلوك الجلسة</string>
+    <string name="permissions">الأذونات</string>
     <string name="shortcut_switch_by_number">التبديل السريع بالرقم</string>
     <string name="shortcut_switch_by_number_desc">التبديل إلى الجلسة N بالمعدِّل + 1–9</string>
 </resources>
