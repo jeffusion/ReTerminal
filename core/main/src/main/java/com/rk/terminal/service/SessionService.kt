@@ -15,6 +15,7 @@ import com.rk.resources.strings
 import com.rk.terminal.ui.activities.terminal.MainActivity
 import com.rk.terminal.ui.screens.settings.Settings
 import com.rk.terminal.ui.screens.terminal.MkSession
+import com.rk.terminal.ui.screens.settings.WorkingMode
 import com.termux.terminal.TerminalSession
 import com.termux.terminal.TerminalSessionClient
 
@@ -39,7 +40,21 @@ class SessionService : Service() {
     fun getDisplayTitle(sessionId: String): String {
         return sessionCustomNames[sessionId]
             ?: sessionTitles[sessionId]?.takeIf { it.isNotBlank() }
-            ?: sessionId
+            ?: getDefaultSessionName(sessionId)
+    }
+
+    private fun getDefaultSessionName(sessionId: String): String {
+        val modeName = when (sessionList[sessionId]) {
+            WorkingMode.ALPINE -> "alpine"
+            WorkingMode.ANDROID -> "android"
+            WorkingMode.ALPINE_ROOT -> "alpine (root)"
+            else -> sessionId
+        }
+        return modeName
+    }
+
+    fun getWorkingMode(sessionId: String): Int? {
+        return sessionList[sessionId]
     }
 
     fun updateTerminalTitle(sessionId: String, title: String) {

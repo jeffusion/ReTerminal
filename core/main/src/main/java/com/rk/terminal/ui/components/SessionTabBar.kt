@@ -33,6 +33,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import androidx.compose.ui.graphics.Color
+import com.rk.terminal.ui.screens.settings.WorkingMode
 
 private val TAB_WIDTH = 160.dp
 private val TAB_HEIGHT = 36.dp
@@ -48,6 +50,7 @@ fun SessionTabBar(
     sessions: List<String>,
     currentSessionId: String,
     getDisplayTitle: (String) -> String,
+    getWorkingMode: (String) -> Int?,
     onSelectSession: (String) -> Unit,
     onCloseSession: (String) -> Unit,
     onAddSession: () -> Unit,
@@ -118,10 +121,10 @@ fun SessionTabBar(
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = if (selected)
-                                    MaterialTheme.colorScheme.onSurface
-                                else
-                                    MaterialTheme.colorScheme.onSurfaceVariant,
+                                color = getSessionColor(
+                                    workingMode = getWorkingMode(sessionId),
+                                    selected = selected
+                                ),
                                 modifier = Modifier.weight(1f)
                             )
 
@@ -177,5 +180,24 @@ fun SessionTabBar(
                 )
             }
         }
+    }
+}
+
+/**
+ * Returns the display color for a session based on its working mode.
+ * Colors indicate privilege level:
+ * - Alpine (non-root): default theme color
+ * - Android (system shell): amber/warning
+ * - Alpine Root: red/danger
+ */
+@Composable
+private fun getSessionColor(workingMode: Int?, selected: Boolean): Color {
+    return when (workingMode) {
+        WorkingMode.ALPINE_ROOT -> Color(0xFFEF5350) // Red — root danger
+        WorkingMode.ANDROID -> Color(0xFFFFA726) // Amber — system shell
+        else -> if (selected)
+            MaterialTheme.colorScheme.onSurface
+        else
+            MaterialTheme.colorScheme.onSurfaceVariant
     }
 }

@@ -341,6 +341,7 @@ fun TerminalScreen(
                     sessions = sessionKeys,
                     currentSessionId = currentSessionId,
                     getDisplayTitle = { id -> service?.getDisplayTitle(id) ?: id },
+                    getWorkingMode = { id -> service?.getWorkingMode(id) },
                     onSelectSession = { id -> changeSession(mainActivityActivity, id) },
                     onCloseSession = { id -> handleCloseSession(id, currentSessionId) },
                     onAddSession = { showAddDialog = true },
@@ -442,7 +443,8 @@ fun TerminalScreen(
                                             ) {
                                                 Text(
                                                     text = service.getDisplayTitle(session_id),
-                                                    style = MaterialTheme.typography.bodyLarge
+                                                    style = MaterialTheme.typography.bodyLarge,
+                                                    color = getSessionTextColor(service.getWorkingMode(session_id))
                                                 )
 
                                                 if (session_id != service.currentSession.value.first) {
@@ -488,6 +490,22 @@ fun TerminalScreen(
     }
 }
 
+
+/**
+ * Returns a color for session text based on working mode privilege level.
+ * - Alpine Root: red (danger)
+ * - Android: amber (warning)
+ * - Alpine/default: theme default
+ */
+@Composable
+fun getSessionTextColor(workingMode: Int?): androidx.compose.ui.graphics.Color {
+    return when (workingMode) {
+        WorkingMode.ALPINE_ROOT -> androidx.compose.ui.graphics.Color(0xFFEF5350)
+        WorkingMode.ANDROID -> androidx.compose.ui.graphics.Color(0xFFFFA726)
+        else -> MaterialTheme.colorScheme.onSurface
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TerminalContent(
@@ -506,15 +524,6 @@ fun TerminalContent(
         val color = getComposeColor()
         Column {
 
-            fun getNameOfWorkingMode(workingMode: Int?): String {
-                return when (workingMode) {
-                    WorkingMode.ALPINE -> "alpine"
-                    WorkingMode.ANDROID -> "android"
-                    WorkingMode.ALPINE_ROOT -> "alpine (root)"
-                    null -> "null"
-                    else -> "unknown"
-                }
-            }
 
             val showToolbarCondition = showToolbar.value && (LocalConfiguration.current.orientation != Configuration.ORIENTATION_LANDSCAPE || showHorizontalToolbar.value)
 
@@ -522,7 +531,7 @@ fun TerminalContent(
                 val service = mainActivityActivity.sessionBinder?.getService()
                 val currentSessionId = service?.currentSession?.value?.first ?: ""
                 val displayTitle = service?.getDisplayTitle(currentSessionId) ?: currentSessionId
-                val workingModeName = getNameOfWorkingMode(service?.currentSession?.value?.second)
+                val currentWorkingMode = service?.getWorkingMode(currentSessionId)
 
                 TopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(
@@ -534,8 +543,8 @@ fun TerminalContent(
                             Text(text = "ReTerminal", color = color)
                             Text(
                                 style = MaterialTheme.typography.bodySmall,
-                                text = "$displayTitle ($workingModeName)",
-                                color = color
+                                text = displayTitle,
+                                color = getSessionTextColor(currentWorkingMode)
                             )
                         }
                     },
